@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYSTEM ALERT</title>
+<style>
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:#080000;
+  color:#ff2525;
+  font-family:Consolas,monospace;
+  overflow:hidden;
+}
+#screen {
+  min-height:100vh;
+  padding:25px;
+  background:radial-gradient(#300000,#050000);
+  animation:glitch 2s infinite;
+}
+@keyframes glitch {
+  0%,95%,100% {transform:translate(0)}
+  96% {transform:translate(3px,-2px)}
+  98% {transform:translate(-3px,2px)}
+}
+h1 {
+  text-align:center;
+  font-size:clamp(28px,6vw,55px);
+  text-shadow:0 0 20px red;
+  animation:flash .7s infinite alternate;
+}
+@keyframes flash {
+  from {opacity:1}
+  to {opacity:.35}
+}
+.panel {
+  border:1px solid red;
+  padding:18px;
+  margin:15px auto;
+  max-width:750px;
+  background:#150000;
+  box-shadow:0 0 15px #700000;
+}
+.bar {
+  height:22px;
+  border:1px solid red;
+  margin-top:12px;
+}
+#fill {
+  height:100%;
+  width:0%;
+  background:red;
+  transition:width .3s;
+}
+#terminal {
+  height:180px;
+  overflow:hidden;
+  color:#ff7777;
+  font-size:13px;
+}
+button {
+  background:#8b0000;
+  border:1px solid red;
+  color:white;
+  padding:14px 20px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:8px;
+}
+button:hover {background:red}
+.center {text-align:center}
+#warning {font-size:24px;text-align:center}
+#stopped {display:none;color:#00ff77}
+</style>
+</head>
+<body>
+<div id="screen">
+<h1>⚠ SYSTEM COMPROMISED ⚠</h1>
+
+<div class="panel center">
+  <div id="warning">SIMULATED VIRUS ATTACK</div>
+  <p>FAKE SYSTEM SCAN IN PROGRESS</p>
+  <h2 id="percent">0%</h2>
+  <div class="bar"><div id="fill"></div></div>
+  <p>Fake files scanned: <span id="files">0</span></p>
+  <p>Status: <span id="status">SIMULATION ACTIVE</span></p>
+</div>
+
+<div class="panel">
+  <h3>FAKE SYSTEM TERMINAL</h3>
+  <div id="terminal"></div>
+</div>
+
+<div class="panel center">
+  <h2>⚠ SECURITY WARNING ⚠</h2>
+  <p>This is a visual simulation. No real files are affected.</p>
+  <h2 id="stopped">SIMULATION STOPPED</h2>
+  <button onclick="stopSim()">STOP SIMULATION</button>
+  <button onclick="location.reload()">RESTART</button>
+</div>
+</div>
+
+<script>
+let progress = 0;
+let running = true;
+
+const messages = [
+  "[SIM] Initializing visual effects...",
+  "[SIM] Checking imaginary system files...",
+  "[SIM] Scanning demo directories...",
+  "[SIM] Generating fake security alert...",
+  "[SIM] Running animation sequence...",
+  "[SIM] Testing visual warning system...",
+  "[SIM] No real files are being changed.",
+  "[SIM] Simulation running..."
+];
+
+const terminal = document.getElementById("terminal");
+
+function log() {
+  if(!running) return;
+  const line = document.createElement("div");
+  line.textContent =
+    messages[Math.floor(Math.random()*messages.length)];
+  terminal.appendChild(line);
+  while(terminal.children.length > 10)
+    terminal.removeChild(terminal.firstChild);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+const timer = setInterval(() => {
+  if(!running) return;
+
+  progress += Math.floor(Math.random()*4)+1;
+  if(progress > 100) progress = 100;
+
+  document.getElementById("percent").textContent =
+    progress + "%";
+  document.getElementById("fill").style.width =
+    progress + "%";
+  document.getElementById("files").textContent =
+    Math.floor(progress*124);
+
+  if(progress === 100) {
+    document.getElementById("status").textContent =
+      "DEMO COMPLETE";
+    clearInterval(timer);
+  }
+}, 500);
+
+const logger = setInterval(log, 700);
+log();
+
+function stopSim() {
+  running = false;
+  clearInterval(timer);
+  clearInterval(logger);
+  document.getElementById("status").textContent =
+    "STOPPED";
+  document.getElementById("stopped").style.display =
+    "block";
+  document.getElementById("warning").textContent =
+    "SIMULATION ENDED";
+  document.body.style.animation = "none";
+  document.getElementById("screen").style.animation =
+    "none";
+}
+</script>
+</body>
+</html>
